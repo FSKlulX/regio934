@@ -1,0 +1,248 @@
+<title>Regio 9¾</title>
+<style>
+  /* Layout: ein Röntgen-Viewer — Film oben, Befundbericht darunter, eine schmale Spalte. Bewusst nur dunkel. */
+  :root {
+    --bg: #0b0e12;
+    --film: #050709;
+    --panel: #11161c;
+    --line: #232c34;
+    --fg: #d7dee4;
+    --dim: #8b969f;
+    --accent: #56cfc3;
+    --glint: #ffd97a;
+    --font-data: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --font-text: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-text);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 40px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+
+  .kopf { display: flex; flex-direction: column; gap: 4px; }
+  .kopf .eyebrow {
+    font-family: var(--font-data); font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .kopf h1 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: .01em; text-wrap: balance; }
+  .kopf .sub { color: var(--dim); font-size: 14px; font-family: var(--font-data); }
+
+  figure.film {
+    margin: 0; background: var(--film); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px; position: relative; overflow: hidden;
+  }
+  figure.film svg { display: block; width: 100%; height: auto; max-width: 100%; }
+  figcaption {
+    font-family: var(--font-data); font-size: 11px; color: var(--dim);
+    padding: 8px 4px 2px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+
+  section.block { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  section.block h2 {
+    margin: 0 0 10px; font-family: var(--font-data); font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--accent); font-weight: 600;
+  }
+  section.block p { margin: 0 0 10px; font-size: 15px; }
+  section.block p:last-child { margin-bottom: 0; }
+  .zeile { display: flex; gap: 10px; align-items: baseline; margin-bottom: 8px; }
+  .zeile:last-child { margin-bottom: 0; }
+  .zeile .z {
+    font-family: var(--font-data); font-size: 12px; color: var(--dim);
+    flex: 0 0 72px; padding-top: 2px;
+  }
+  .zeile .t { font-size: 15px; min-width: 0; }
+  .hell { color: var(--glint); }
+
+  .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 4px; }
+  .cd {
+    background: var(--film); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 6px; text-align: center;
+  }
+  .cd b {
+    display: block; font-family: var(--font-data); font-variant-numeric: tabular-nums;
+    font-size: 26px; font-weight: 600; color: var(--fg);
+  }
+  .cd span {
+    font-family: var(--font-data); font-size: 10px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  #cd-fertig { display: none; font-size: 16px; color: var(--accent); font-weight: 600; }
+
+  footer {
+    color: var(--dim); font-size: 11.5px; font-family: var(--font-data);
+    line-height: 1.7; border-top: 1px solid var(--line); padding-top: 14px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .narbe { animation: glimmen 3.2s ease-in-out infinite; }
+    @keyframes glimmen { 0%, 100% { opacity: .85; } 50% { opacity: 1; } }
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap">
+
+<div class="wrap">
+  <header class="kopf">
+    <span class="eyebrow">Röntgenologischer Befund</span>
+    <h1>Bissflügelaufnahme, Regio 9¾</h1>
+    <span class="sub">Patient: Jahrgang 2026 · Zahnklinik der MHH · Indikation: Verdacht auf verstecktes Easter Egg</span>
+  </header>
+
+  <figure class="film">
+    <svg viewBox="0 0 640 400" role="img" aria-label="Stilisierte Bissflügel-Röntgenaufnahme mit sechs Zähnen, auf Zahn 46 eine blitzförmige helle Struktur">
+      <defs>
+        <radialGradient id="vig" cx="50%" cy="50%" r="72%">
+          <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#000" stop-opacity=".55"/>
+        </radialGradient>
+        <linearGradient id="knochenO" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#9aa6ad" stop-opacity=".55"/>
+          <stop offset="100%" stop-color="#9aa6ad" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="knochenU" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#9aa6ad" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#9aa6ad" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="weich" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="1.6"/>
+        </filter>
+        <filter id="schein" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <rect x="0" y="0" width="640" height="400" rx="8" fill="#05070a"/>
+
+      <!-- Knochenkämme oben und unten -->
+      <rect x="0" y="0" width="640" height="84" fill="url(#knochenO)" filter="url(#weich)"/>
+      <rect x="0" y="312" width="640" height="88" fill="url(#knochenU)" filter="url(#weich)"/>
+
+      <!-- Oberkiefer: 17, 16, 15 (Kronen nach unten, Wurzeln angeschnitten) -->
+      <g filter="url(#weich)">
+        <path d="M78 0 L84 86 Q86 120 100 138 Q128 166 156 138 Q170 120 172 86 L178 0 Z" fill="#aeb9c0" opacity=".92"/>
+        <path d="M100 138 Q128 170 156 138 Q160 150 128 158 Q96 150 100 138 Z" fill="#e7edf1"/>
+        <path d="M120 60 Q128 96 136 60 L132 36 L124 36 Z" fill="#4b565e" opacity=".8"/>
+
+        <path d="M206 0 L210 90 Q212 126 228 146 Q258 176 288 146 Q304 126 306 90 L310 0 Z" fill="#b3bec5" opacity=".94"/>
+        <path d="M228 146 Q258 180 288 146 Q292 160 258 168 Q224 160 228 146 Z" fill="#eaf0f4"/>
+        <path d="M248 64 Q258 102 268 64 L263 38 L253 38 Z" fill="#4b565e" opacity=".8"/>
+
+        <path d="M340 0 L343 84 Q345 118 357 136 Q380 162 403 136 Q415 118 417 84 L420 0 Z" fill="#aeb9c0" opacity=".9"/>
+        <path d="M357 136 Q380 166 403 136 Q406 148 380 156 Q354 148 357 136 Z" fill="#e7edf1"/>
+        <path d="M372 58 Q380 92 388 58 L384 34 L376 34 Z" fill="#4b565e" opacity=".8"/>
+      </g>
+
+      <!-- Unterkiefer: 47, 46, 45 (Kronen nach oben) -->
+      <g filter="url(#weich)">
+        <path d="M96 400 L100 310 Q102 276 116 258 Q142 230 168 258 Q182 276 184 310 L188 400 Z" fill="#b0bbc2" opacity=".92"/>
+        <path d="M116 258 Q142 226 168 258 Q172 244 142 236 Q112 244 116 258 Z" fill="#e8eef2"/>
+        <path d="M134 336 Q142 302 150 336 L146 362 L138 362 Z" fill="#4b565e" opacity=".8"/>
+
+        <path d="M218 400 L222 306 Q224 270 240 250 Q272 218 304 250 Q320 270 322 306 L326 400 Z" fill="#b6c1c8" opacity=".95"/>
+        <path d="M240 250 Q272 214 304 250 Q308 234 272 226 Q236 234 240 250 Z" fill="#ecf2f6"/>
+        <path d="M262 330 Q272 294 282 330 L277 358 L267 358 Z" fill="#4b565e" opacity=".8"/>
+        <!-- Blitzförmige röntgenopake Struktur im Schmelz des 46 -->
+        <path class="narbe" d="M268 232 L262 246 L269 245 L260 262 L276 242 L268 243 L276 232 Z"
+              fill="#fff3cf" filter="url(#schein)"/>
+
+        <path d="M352 400 L355 314 Q357 282 369 264 Q391 240 413 264 Q425 282 427 314 L430 400 Z" fill="#aeb9c0" opacity=".9"/>
+        <path d="M369 264 Q391 236 413 264 Q416 252 391 245 Q366 252 369 264 Z" fill="#e7edf1"/>
+        <path d="M384 338 Q391 308 398 338 L394 360 L388 360 Z" fill="#4b565e" opacity=".8"/>
+      </g>
+
+      <!-- Regio 9¾: angeschnittene Aufhellung am rechten Filmrand -->
+      <g opacity=".9">
+        <circle cx="560" cy="200" r="46" fill="#1a222a" filter="url(#weich)"/>
+        <text x="560" y="194" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="20" fill="#56cfc3">9¾</text>
+        <text x="560" y="216" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#8b969f" letter-spacing="1">REGIO</text>
+      </g>
+
+      <!-- Seitenmarker und Datums-Einblendung wie am Röntgen-Viewer -->
+      <circle cx="606" cy="34" r="16" fill="none" stroke="#56cfc3" stroke-width="1.4" opacity=".85"/>
+      <text x="606" y="39" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="#56cfc3" opacity=".9">R</text>
+      <text x="16" y="384" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6f7b84">MHH · 17.12.2026 · 18:00 · HOERSAAL P</text>
+
+      <rect x="0" y="0" width="640" height="400" rx="8" fill="url(#vig)"/>
+    </svg>
+    <figcaption>
+      <span>Bissflügel rechts · 15–17, 45–47</span>
+      <span>Aufnahme: 1. Semester · unverblindet</span>
+    </figcaption>
+  </figure>
+
+  <section class="block">
+    <h2>Befund</h2>
+    <div class="zeile"><span class="z">15–17</span><span class="t">unauffällig. Approximalräume o. B., keine Aufhellungen.</span></div>
+    <div class="zeile"><span class="z">45, 47</span><span class="t">unauffällig. Knochenniveau regelrecht.</span></div>
+    <div class="zeile"><span class="z">46</span><span class="t">blitzförmige röntgenopake Struktur im Schmelz, kein Substanzdefekt. Am ehesten: Narbe. <span class="hell">Der Zahn, der überlebte.</span></span></div>
+    <div class="zeile"><span class="z">Regio 9¾</span><span class="t">liegt außerhalb des FDI-Schemas. Diese Aufnahme dürfte es nicht geben. Du siehst sie trotzdem.</span></div>
+  </section>
+
+  <section class="block">
+    <h2>Diagnose</h2>
+    <p>Akuter Weihnachtscafé-Befall. Hochansteckend, Verlauf: feierlich.</p>
+    <p>Und: Glückwunsch. Du hast den Barcode gescannt, den alle anderen für Deko gehalten haben.</p>
+  </section>
+
+  <section class="block">
+    <h2>Therapieempfehlung</h2>
+    <div class="zeile"><span class="z">Was</span><span class="t">„Harry Protar und der Zahn der Weisen" — Theaterstück des 1. Semesters, danach Buffet und Party.</span></div>
+    <div class="zeile"><span class="z">Wann</span><span class="t">Donnerstag, 17.12.2026, 18:00 Uhr</span></div>
+    <div class="zeile"><span class="z">Wo</span><span class="t">Hörsaal P, Zahnklinik der MHH</span></div>
+    <div class="zeile"><span class="z">Dosis</span><span class="t">ein Abend. Überdosierung ausdrücklich erwünscht. Recall: in einem Jahr, gleiche Stelle.</span></div>
+  </section>
+
+  <section class="block">
+    <h2>Zeit bis zur Behandlung</h2>
+    <div class="countdown" id="countdown">
+      <div class="cd"><b id="cd-t">–</b><span>Tage</span></div>
+      <div class="cd"><b id="cd-h">–</b><span>Std</span></div>
+      <div class="cd"><b id="cd-m">–</b><span>Min</span></div>
+      <div class="cd"><b id="cd-s">–</b><span>Sek</span></div>
+    </div>
+    <p id="cd-fertig"></p>
+  </section>
+
+  <footer>
+    Dieser Befund ersetzt keine klinische Untersuchung. Bei anhaltendem Lachen konsultieren Sie das erste Semester.<br>
+    Für diese Aufnahme wurde kein Gips ins Waschbecken gekippt.
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var start = new Date("2026-12-17T18:00:00+01:00").getTime();
+    var ende = start + 8 * 3600 * 1000;
+    var elT = document.getElementById("cd-t");
+    var elH = document.getElementById("cd-h");
+    var elM = document.getElementById("cd-m");
+    var elS = document.getElementById("cd-s");
+    var grid = document.getElementById("countdown");
+    var fertig = document.getElementById("cd-fertig");
+
+    function tick() {
+      var jetzt = Date.now();
+      if (jetzt >= start) {
+        grid.style.display = "none";
+        fertig.style.display = "block";
+        fertig.textContent = jetzt < ende
+          ? "Die Behandlung läuft. Hörsaal P, sofort."
+          : "Behandlung abgeschlossen. Recall: Weihnachtscafé 2027.";
+        return;
+      }
+      var d = Math.floor((start - jetzt) / 1000);
+      elT.textContent = Math.floor(d / 86400);
+      elH.textContent = String(Math.floor(d / 3600) % 24).padStart(2, "0");
+      elM.textContent = String(Math.floor(d / 60) % 60).padStart(2, "0");
+      elS.textContent = String(d % 60).padStart(2, "0");
+      setTimeout(tick, 1000 - (jetzt % 1000));
+    }
+    tick();
+  })();
+</script>
