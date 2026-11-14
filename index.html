@@ -81,10 +81,39 @@
 
   @media (prefers-reduced-motion: no-preference) {
     .narbe { animation: glimmen 3.2s ease-in-out infinite; }
-    @keyframes glimmen { 0%, 100% { opacity: .85; } 50% { opacity: 1; } }
+    @keyframes glimmen { 0%, 100% { opacity: .78; } 50% { opacity: .95; } }
   }
+
+  /* Rumtreiber-Karte */
+  .karte-hinweis { color: var(--dim); font-size: 13.5px; }
+  .schwur {
+    width: 100%; background: linear-gradient(160deg, #efe4c6, #dcc99e);
+    color: #4a3a22; border: 1px solid #b89f6e; border-radius: 10px;
+    padding: 18px 16px; font-family: "Caveat", cursive; font-size: 22px;
+    line-height: 1.25; cursor: pointer; text-align: center;
+    box-shadow: inset 0 0 26px rgba(91, 74, 47, .22);
+  }
+  .schwur:active { transform: scale(.99); }
+  .karte-inhalt { border-radius: 10px; overflow: hidden; border: 1px solid #b89f6e; }
+  .karte-inhalt.zu { display: none; }
+  .karte-inhalt.auf { animation: tinte .9s ease-out; }
+  @keyframes tinte { from { opacity: 0; filter: sepia(.6) blur(3px); } to { opacity: 1; filter: none; } }
+  .karte-kopf, .karte-fuss {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    background: #e9dcba; color: #4a3a22; font-family: "Caveat", cursive;
+    padding: 8px 12px; font-size: 18px;
+  }
+  .karte-kopf b { font-family: var(--font-data); font-size: 14px; font-weight: 600; }
+  .karte-fuss { border-top: 1px dashed #b89f6e; font-size: 16px; }
+  .karte-fuss button {
+    background: none; border: 1px solid #a98f5d; border-radius: 7px; color: #4a3a22;
+    font-family: "Caveat", cursive; font-size: 16px; padding: 3px 12px; cursor: pointer;
+  }
+  .karte-buehne { position: relative; background: #e8dcbc; }
+  .karte-buehne svg { display: block; width: 100%; height: auto; }
+  .karte-buehne canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=Caveat:wght@600;700&display=swap">
 
 <div class="wrap">
   <header class="kopf">
@@ -94,66 +123,91 @@
   </header>
 
   <figure class="film">
-    <svg viewBox="0 0 640 400" role="img" aria-label="Stilisierte Bissflügel-Röntgenaufnahme mit sechs Zähnen, auf Zahn 46 eine blitzförmige helle Struktur">
+    <svg viewBox="0 0 640 400" role="img" aria-label="Stilisierte Bissflügel-Röntgenaufnahme mit sechs Zähnen; durch die Krone von Zahn 46 zieht eine blitzförmige dunkle Frakturlinie">
       <defs>
         <radialGradient id="vig" cx="50%" cy="50%" r="72%">
-          <stop offset="60%" stop-color="#000" stop-opacity="0"/>
-          <stop offset="100%" stop-color="#000" stop-opacity=".55"/>
+          <stop offset="58%" stop-color="#000" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#000" stop-opacity=".6"/>
         </radialGradient>
         <linearGradient id="knochenO" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#9aa6ad" stop-opacity=".55"/>
-          <stop offset="100%" stop-color="#9aa6ad" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#8e9aa2" stop-opacity=".78"/>
+          <stop offset="70%" stop-color="#76828b" stop-opacity=".36"/>
+          <stop offset="100%" stop-color="#76828b" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="knochenU" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stop-color="#9aa6ad" stop-opacity=".6"/>
-          <stop offset="100%" stop-color="#9aa6ad" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#939fa7" stop-opacity=".82"/>
+          <stop offset="65%" stop-color="#7a868f" stop-opacity=".4"/>
+          <stop offset="100%" stop-color="#7a868f" stop-opacity="0"/>
         </linearGradient>
-        <filter id="weich" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.6"/>
-        </filter>
-        <filter id="schein" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="3.5" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
+        <linearGradient id="schmelzO" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#b9c6ce"/>
+          <stop offset="100%" stop-color="#eef4f8"/>
+        </linearGradient>
+        <linearGradient id="schmelzU" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#b9c6ce"/>
+          <stop offset="100%" stop-color="#f2f7fa"/>
+        </linearGradient>
+        <filter id="weich" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.3"/></filter>
+        <filter id="weich2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.4"/></filter>
+        <filter id="riss" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation=".6"/></filter>
+        <filter id="korn"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 .8  0 0 0 0 .85  0 0 0 0 .9  0 0 0 .05 0"/></filter>
+        <filter id="trabekel"><feTurbulence type="fractalNoise" baseFrequency="0.055 0.075" numOctaves="3" seed="11" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 .66  0 0 0 0 .72  0 0 0 0 .77  0 0 0 .22 0"/></filter>
+        <clipPath id="clipKnO"><path d="M0 0 H640 V58 Q560 86 470 80 Q380 74 300 82 Q210 92 120 84 Q60 79 0 64 Z"/></clipPath>
+        <clipPath id="clipKnU"><path d="M0 400 H640 V330 Q560 306 468 314 Q380 322 298 314 Q208 304 118 314 Q58 320 0 326 Z"/></clipPath>
       </defs>
 
       <rect x="0" y="0" width="640" height="400" rx="8" fill="#05070a"/>
 
-      <!-- Knochenkämme oben und unten -->
-      <rect x="0" y="0" width="640" height="84" fill="url(#knochenO)" filter="url(#weich)"/>
-      <rect x="0" y="312" width="640" height="88" fill="url(#knochenU)" filter="url(#weich)"/>
-
-      <!-- Oberkiefer: 17, 16, 15 (Kronen nach unten, Wurzeln angeschnitten) -->
+      <!-- Alveolarknochen: Kammverlauf mit Spongiosazeichnung -->
       <g filter="url(#weich)">
-        <path d="M78 0 L84 86 Q86 120 100 138 Q128 166 156 138 Q170 120 172 86 L178 0 Z" fill="#aeb9c0" opacity=".92"/>
-        <path d="M100 138 Q128 170 156 138 Q160 150 128 158 Q96 150 100 138 Z" fill="#e7edf1"/>
-        <path d="M120 60 Q128 96 136 60 L132 36 L124 36 Z" fill="#4b565e" opacity=".8"/>
-
-        <path d="M206 0 L210 90 Q212 126 228 146 Q258 176 288 146 Q304 126 306 90 L310 0 Z" fill="#b3bec5" opacity=".94"/>
-        <path d="M228 146 Q258 180 288 146 Q292 160 258 168 Q224 160 228 146 Z" fill="#eaf0f4"/>
-        <path d="M248 64 Q258 102 268 64 L263 38 L253 38 Z" fill="#4b565e" opacity=".8"/>
-
-        <path d="M340 0 L343 84 Q345 118 357 136 Q380 162 403 136 Q415 118 417 84 L420 0 Z" fill="#aeb9c0" opacity=".9"/>
-        <path d="M357 136 Q380 166 403 136 Q406 148 380 156 Q354 148 357 136 Z" fill="#e7edf1"/>
-        <path d="M372 58 Q380 92 388 58 L384 34 L376 34 Z" fill="#4b565e" opacity=".8"/>
+        <path d="M0 0 H640 V58 Q560 86 470 80 Q380 74 300 82 Q210 92 120 84 Q60 79 0 64 Z" fill="url(#knochenO)"/>
+        <path d="M0 400 H640 V330 Q560 306 468 314 Q380 322 298 314 Q208 304 118 314 Q58 320 0 326 Z" fill="url(#knochenU)"/>
+      </g>
+      <rect x="0" y="0" width="640" height="96" clip-path="url(#clipKnO)" filter="url(#trabekel)"/>
+      <rect x="0" y="300" width="640" height="100" clip-path="url(#clipKnU)" filter="url(#trabekel)"/>
+      <!-- Interdentalsepten -->
+      <g filter="url(#weich2)" fill="#a9b4bc" opacity=".45">
+        <path d="M178 0 L198 0 L188 70 Z"/><path d="M322 0 L342 0 L332 72 Z"/>
+        <path d="M195 400 L214 400 L205 334 Z"/><path d="M335 400 L352 400 L344 338 Z"/>
       </g>
 
-      <!-- Unterkiefer: 47, 46, 45 (Kronen nach oben) -->
+      <!-- Oberkiefer: 17, 16, 15 — Dentin, Schmelzkappe, Pulpa mit Kanälen -->
       <g filter="url(#weich)">
-        <path d="M96 400 L100 310 Q102 276 116 258 Q142 230 168 258 Q182 276 184 310 L188 400 Z" fill="#b0bbc2" opacity=".92"/>
-        <path d="M116 258 Q142 226 168 258 Q172 244 142 236 Q112 244 116 258 Z" fill="#e8eef2"/>
-        <path d="M134 336 Q142 302 150 336 L146 362 L138 362 Z" fill="#4b565e" opacity=".8"/>
+        <path d="M62 0 L68 84 Q71 122 87 142 Q104 160 121 160 Q138 160 154 142 Q169 122 172 84 L178 0 Z" fill="#8e9aa3" opacity=".9"/>
+        <path d="M76 100 Q80 130 92 146 Q106 162 121 162 Q136 162 150 146 Q162 130 166 100 L158 102 Q154 124 142 138 Q130 150 121 150 Q112 150 100 138 Q88 124 84 102 Z" fill="url(#schmelzO)" opacity=".95"/>
+        <path d="M110 66 Q113 88 121 90 Q129 88 132 66 Q127 58 121 58 Q115 58 110 66 Z" fill="#39434b" opacity=".72"/>
+        <path d="M113 60 Q110 30 108 0 M129 60 Q132 30 134 0" stroke="#39434b" stroke-width="2" fill="none" opacity=".35"/>
 
-        <path d="M218 400 L222 306 Q224 270 240 250 Q272 218 304 250 Q320 270 322 306 L326 400 Z" fill="#b6c1c8" opacity=".95"/>
-        <path d="M240 250 Q272 214 304 250 Q308 234 272 226 Q236 234 240 250 Z" fill="#ecf2f6"/>
-        <path d="M262 330 Q272 294 282 330 L277 358 L267 358 Z" fill="#4b565e" opacity=".8"/>
-        <!-- Blitzförmige röntgenopake Struktur im Schmelz des 46 -->
-        <path class="narbe" d="M268 232 L262 246 L269 245 L260 262 L276 242 L268 243 L276 232 Z"
-              fill="#fff3cf" filter="url(#schein)"/>
+        <path d="M196 0 L202 86 Q205 126 222 148 Q241 168 259 168 Q277 168 296 148 Q313 126 316 86 L322 0 Z" fill="#939fa8" opacity=".92"/>
+        <path d="M210 102 Q214 136 229 154 Q244 170 259 170 Q274 170 289 154 Q304 136 308 102 L300 104 Q296 130 283 146 Q271 158 259 158 Q247 158 235 146 Q222 130 218 104 Z" fill="url(#schmelzO)" opacity=".95"/>
+        <path d="M246 160 Q252 151 259 152 Q268 151 273 160 Q268 167 259 167 Q251 167 246 160 Z" fill="#ffffff" opacity=".96"/>
+        <path d="M246 68 Q249 92 259 94 Q269 92 272 68 Q266 59 259 59 Q252 59 246 68 Z" fill="#39434b" opacity=".72"/>
+        <path d="M250 60 Q247 28 245 0 M268 60 Q271 28 273 0" stroke="#39434b" stroke-width="2" fill="none" opacity=".35"/>
 
-        <path d="M352 400 L355 314 Q357 282 369 264 Q391 240 413 264 Q425 282 427 314 L430 400 Z" fill="#aeb9c0" opacity=".9"/>
-        <path d="M369 264 Q391 236 413 264 Q416 252 391 245 Q366 252 369 264 Z" fill="#e7edf1"/>
-        <path d="M384 338 Q391 308 398 338 L394 360 L388 360 Z" fill="#4b565e" opacity=".8"/>
+        <path d="M342 0 L346 80 Q348 114 360 132 Q372 148 383 148 Q394 148 406 132 Q418 114 420 80 L424 0 Z" fill="#8e9aa3" opacity=".88"/>
+        <path d="M356 96 Q360 122 368 136 Q376 150 383 150 Q390 150 398 136 Q406 122 410 96 L402 98 Q398 118 390 132 Q383 140 376 132 Q368 118 364 98 Z" fill="url(#schmelzO)" opacity=".95"/>
+        <path d="M377 64 Q380 82 383 84 Q386 82 389 64 Q386 56 383 56 Q380 56 377 64 Z" fill="#39434b" opacity=".72"/>
+        <path d="M383 58 Q382 26 382 0" stroke="#39434b" stroke-width="2" fill="none" opacity=".35"/>
+      </g>
+
+      <!-- Unterkiefer: 47, 46, 45 — mit Furkation der Molaren -->
+      <g filter="url(#weich)">
+        <path d="M84 400 L90 318 Q93 280 109 260 Q126 242 140 242 Q154 242 170 260 Q186 280 189 318 L195 400 H168 L164 364 Q156 352 148 364 L144 400 Z" fill="#939fa8" opacity=".92"/>
+        <path d="M98 308 Q102 276 114 260 Q127 244 140 244 Q153 244 166 260 Q178 276 182 308 L174 306 Q170 280 158 266 Q148 256 140 256 Q130 256 122 266 Q110 280 106 306 Z" fill="url(#schmelzU)" opacity=".95"/>
+        <path d="M130 336 Q133 316 140 314 Q147 316 150 336 Q146 343 140 343 Q134 343 130 336 Z" fill="#39434b" opacity=".72"/>
+        <path d="M133 342 Q130 372 128 400 M147 342 Q150 372 152 400" stroke="#39434b" stroke-width="2" fill="none" opacity=".35"/>
+
+        <path d="M212 400 L218 316 Q221 276 239 254 Q258 234 274 234 Q290 234 308 254 Q326 276 329 316 L335 400 H306 L302 360 Q293 346 284 360 L280 400 Z" fill="#97a3ac" opacity=".93"/>
+        <path d="M226 306 Q230 272 244 254 Q252 242 260 246 Q267 250 274 246 Q281 250 288 246 Q296 242 304 254 Q318 272 322 306 L314 304 Q310 278 296 262 Q285 252 274 256 Q263 252 252 262 Q238 278 234 304 Z" fill="url(#schmelzU)" opacity=".95"/>
+        <path d="M258 330 Q261 310 266 306 Q269 304 270 310 Q272 316 274 316 Q276 316 278 310 Q279 304 282 306 Q287 310 290 330 Q283 339 274 339 Q265 339 258 330 Z" fill="#39434b" opacity=".74"/>
+        <path d="M262 338 Q258 370 256 400 M286 338 Q290 370 292 400" stroke="#39434b" stroke-width="2" fill="none" opacity=".35"/>
+        <!-- Blitzförmige Aufhellungslinie: Kronenfraktur des 46 -->
+        <path class="narbe" d="M272 236 L264 258 L274 261 L260 288 L272 290 L258 320" stroke="#141a21" stroke-width="3.2" stroke-linejoin="round" fill="none" filter="url(#riss)"/>
+
+        <path d="M352 400 L356 324 Q358 290 369 272 Q379 258 392 258 Q405 258 415 272 Q426 290 428 324 L432 400 Z" fill="#8e9aa3" opacity=".9"/>
+        <path d="M366 312 Q370 286 377 272 Q384 262 392 262 Q400 262 407 272 Q414 286 418 312 L410 310 Q406 290 398 278 Q392 272 386 278 Q378 290 374 310 Z" fill="url(#schmelzU)" opacity=".95"/>
+        <path d="M387 342 Q389 326 392 324 Q395 326 397 342 Q395 348 392 348 Q389 348 387 342 Z" fill="#39434b" opacity=".72"/>
+        <path d="M392 348 Q392 376 392 400" stroke="#39434b" stroke-width="2" fill="none" opacity=".35"/>
       </g>
 
       <!-- Regio 9¾: umschriebene Verschattung am rechten Filmrand -->
@@ -163,7 +217,8 @@
         <text x="560" y="216" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#8b969f" letter-spacing="1">REGIO</text>
       </g>
 
-      <!-- Seitenmarker und Datums-Einblendung wie am Röntgen-Viewer -->
+      <!-- Filmkorn, Seitenmarker, Datums-Einblendung -->
+      <rect x="0" y="0" width="640" height="400" rx="8" filter="url(#korn)"/>
       <circle cx="606" cy="34" r="16" fill="none" stroke="#56cfc3" stroke-width="1.4" opacity=".85"/>
       <text x="606" y="39" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="#56cfc3" opacity=".9">R</text>
       <text x="16" y="384" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6f7b84">MHH · 17.12.2026 · 18:00 · HOERSAAL P</text>
@@ -178,9 +233,10 @@
 
   <section class="block">
     <h2>Befund</h2>
-    <div class="zeile"><span class="z">15–17</span><span class="t">unauffällig. Approximalräume o. B., keine Aufhellungen.</span></div>
+    <div class="zeile"><span class="z">15, 17</span><span class="t">unauffällig. Approximalräume o. B., keine Aufhellungen.</span></div>
+    <div class="zeile"><span class="z">16</span><span class="t">okklusale, metallisch dichte, röntgenopake Restauration; soweit beurteilbar kein erkennbarer Randspalt, kein röntgenologischer Anhalt für Sekundärkaries.</span></div>
     <div class="zeile"><span class="z">45, 47</span><span class="t">unauffällig. Knochenniveau regelrecht.</span></div>
-    <div class="zeile"><span class="z">46</span><span class="t">blitzförmige, metalldicht röntgenopake Struktur in Projektion auf die Krone, kein Substanzdefekt. Am ehesten: Narbe. <span class="hell">Der Zahn, der überlebte.</span></span></div>
+    <div class="zeile"><span class="z">46</span><span class="t">scharf begrenzte, blitzförmig verlaufende Aufhellungslinie durch Schmelz und Dentin der Krone, ohne erkennbaren Fragmentversatz. Verdacht auf Kronenfraktur — ätiologisch offenbar blitzinduziert. <span class="hell">Der Zahn, der überlebte.</span></span></div>
     <div class="zeile"><span class="z">Regio 9¾</span><span class="t">liegt außerhalb des FDI-Schemas. Diese Aufnahme dürfte es nicht geben. Du siehst sie trotzdem.</span></div>
   </section>
 
@@ -199,6 +255,67 @@
   </section>
 
   <section class="block">
+    <h2>Wegbeschreibung</h2>
+    <p class="karte-hinweis">Tippe auf den Schwur. Die Karte zeigt die Zahnklinik, Ebene S0 — und wohin an diesem Donnerstag alle laufen.</p>
+    <button class="schwur" id="schwur" type="button">„Ich schwöre feierlich, dass ich meinen Platz sauber hinterlasse."</button>
+    <div class="karte-inhalt zu" id="karteInhalt">
+      <div class="karte-kopf"><span>Rumtreiber-Karte · Zahnklinik der MHH</span><b id="karteUhr">08:00</b></div>
+      <div class="karte-buehne">
+        <svg id="planSvg" viewBox="0 0 640 520" role="img" aria-label="Vereinfachter Lageplan der Zahnklinik, Ebene S0: Hörsaal P oben rechts, Cafeteria und Foyer rechts, Haupteingang unten, Seiteneingang rechts. Animierte Fußspuren laufen um 18 Uhr in den Hörsaal P und danach zur Party ins Foyer.">
+          <defs>
+            <radialGradient id="pergament" cx="50%" cy="42%" r="78%">
+              <stop offset="0%" stop-color="#efe4c6"/>
+              <stop offset="78%" stop-color="#e6d8b4"/>
+              <stop offset="100%" stop-color="#d6c398"/>
+            </radialGradient>
+          </defs>
+          <rect x="0" y="0" width="640" height="520" fill="url(#pergament)"/>
+          <!-- Gebäude -->
+          <g fill="none" stroke="#5b4a2f" stroke-width="2.4" stroke-linejoin="round" opacity=".9">
+            <path d="M40 250 H560 V470 H40 Z"/>
+            <path d="M150 60 H460 V235 H150 Z"/>
+            <path d="M300 235 V330 M332 235 V330" stroke-width="1.6" opacity=".7"/>
+            <polygon points="598,120 569,170 511,170 482,120 511,70 569,70"/>
+            <polygon points="584,252 562,290 518,290 496,252 518,214 562,214"/>
+            <path d="M526 170 V330 M554 170 V214 M554 290 V330" stroke-width="1.6" opacity=".7"/>
+          </g>
+          <!-- Flur und Räume -->
+          <g fill="rgba(91,74,47,.07)" stroke="#5b4a2f" stroke-width="1.1" opacity=".85">
+            <rect x="60" y="330" width="525" height="32" stroke-dasharray="3 4"/>
+            <rect x="420" y="250" width="70" height="62"/>
+            <rect x="492" y="292" width="93" height="70" fill="rgba(166,124,54,.10)"/>
+            <rect x="226" y="362" width="28" height="108" stroke-dasharray="3 4"/>
+            <rect x="60" y="362" width="70" height="68" stroke="#a04238"/>
+            <rect x="565" y="296" width="12" height="16" fill="rgba(91,74,47,.25)"/>
+          </g>
+          <!-- Türöffnungen -->
+          <rect x="582" y="333" width="8" height="26" fill="#e6d8b4"/>
+          <rect x="223" y="466" width="34" height="8" fill="#e6d8b4"/>
+          <path d="M592 340 l10 6 M592 352 l10 -6 M240 486 l6 -10 M252 486 l-6 -10" stroke="#5b4a2f" stroke-width="1.6" fill="none" opacity=".8"/>
+          <!-- Beschriftung -->
+          <g fill="#5b4a2f" font-family="Caveat, cursive" text-anchor="middle">
+            <text x="540" y="116" font-size="17" font-weight="700">Hörsaal P</text>
+            <text x="540" y="136" font-size="12">Theater · 18:00</text>
+            <text x="540" y="256" font-size="13">Hörsaal O</text>
+            <text x="305" y="140" font-size="16">Kurssäle (DT)</text>
+            <text x="455" y="284" font-size="12">Cafeteria</text>
+            <text x="530" y="314" font-size="13" font-weight="700">Foyer 1240</text>
+            <text x="530" y="330" font-size="12">★ Party ab 19:45</text>
+            <text x="559" y="307" font-size="9" text-anchor="end">Kaffee</text>
+            <text x="95" y="400" font-size="11">Studien-</text>
+            <text x="95" y="413" font-size="11">dekanat</text>
+            <text x="240" y="494" font-size="13">Haupteingang</text>
+            <text x="520" y="494" font-size="13">Seiteneingang →</text>
+            <text x="110" y="500" font-size="11" opacity=".75">Ebene S0 · stark vereinfacht</text>
+          </g>
+        </svg>
+        <canvas id="spuren" width="640" height="520"></canvas>
+      </div>
+      <div class="karte-fuss"><span id="karteSzene">Vorlesungen und Kurse</span><button id="unheil" type="button">Testat vollbracht</button></div>
+    </div>
+  </section>
+
+  <section class="block">
     <h2>Zeit bis zur Behandlung</h2>
     <div class="countdown" id="countdown">
       <div class="cd"><b id="cd-t">–</b><span>Tage</span></div>
@@ -210,8 +327,7 @@
   </section>
 
   <footer>
-    Dieser Befund ersetzt keine klinische Untersuchung. Bei anhaltendem Lachen konsultieren Sie das erste Semester.<br>
-    Für diese Aufnahme wurde kein Gips ins Waschbecken gekippt.
+    Dieser Befund ersetzt keine klinische Untersuchung. Bei anhaltendem Lachen konsultieren Sie das erste Semester.
   </footer>
 </div>
 
@@ -244,5 +360,236 @@
       setTimeout(tick, 1000 - (jetzt % 1000));
     }
     tick();
+  })();
+</script>
+
+<script>
+  // Rumtreiber-Karte: Fußspuren über den Tag, 18:00 Hörsaal P, ab 19:45 Party im Foyer
+  (function () {
+    var schwur = document.getElementById("schwur");
+    var inhalt = document.getElementById("karteInhalt");
+    var uhr = document.getElementById("karteUhr");
+    var szene = document.getElementById("karteSzene");
+    var cv = document.getElementById("spuren");
+    var ctx = cv.getContext("2d");
+    var reduziert = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var W = 640, H = 520, laufend = false, rafId = 0, startZeit = 0;
+    var agenten = [], spuren = [];
+    var ABSCHNITTE = [
+      { von: 8, bis: 17, dauer: 13, text: "Vorlesungen und Kurse" },
+      { von: 17, bis: 18, dauer: 8, text: "Schlange am Seiteneingang" },
+      { von: 18, bis: 19.75, dauer: 9, text: "Theater in Hörsaal P" },
+      { von: 19.75, bis: 23, dauer: 13, text: "Party im Foyer 1240" }
+    ];
+    var GESAMT = 43, PAUSE = 2.5;
+
+    function skalieren() {
+      var r = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = W * r; cv.height = H * r;
+      ctx.setTransform(r, 0, 0, r, 0, 0);
+    }
+
+    function simZeit(s) {
+      for (var i = 0; i < ABSCHNITTE.length; i++) {
+        if (s < ABSCHNITTE[i].dauer) {
+          var a = ABSCHNITTE[i];
+          return { t: a.von + (a.bis - a.von) * (s / a.dauer), text: a.text };
+        }
+        s -= ABSCHNITTE[i].dauer;
+      }
+      return { t: 23, text: "Bis zum nächsten Weihnachtscafé" };
+    }
+
+    function zufall(a, b) { return a + Math.random() * (b - a); }
+    function hexPunkt(cx, cy, r) {
+      var w = Math.random() * Math.PI * 2, d = Math.sqrt(Math.random()) * r;
+      return { x: cx + Math.cos(w) * d, y: cy + Math.sin(w) * d };
+    }
+
+    var ORTE = {
+      KURS: { punkt: function () { return { x: zufall(170, 440), y: zufall(85, 215) }; }, kette: [{ x: 316, y: 240 }, { x: 316, y: 346 }] },
+      P: { punkt: function () { return hexPunkt(540, 124, 38); }, kette: [{ x: 540, y: 176 }, { x: 540, y: 346 }] },
+      O: { punkt: function () { return hexPunkt(540, 252, 26); }, kette: [{ x: 540, y: 296 }, { x: 540, y: 346 }] },
+      CAF: { punkt: function () { return { x: zufall(430, 482), y: zufall(258, 302) }; }, kette: [{ x: 455, y: 346 }] },
+      FOYER: { punkt: function () { return { x: zufall(496, 578), y: zufall(300, 356) }; }, kette: [] },
+      SD: { punkt: function () { return { x: zufall(68, 122), y: zufall(372, 420) }; }, kette: [{ x: 95, y: 346 }] },
+      FLUR: { punkt: function () { return { x: zufall(75, 570), y: zufall(338, 356) }; }, kette: [] },
+      HAUPT: { punkt: function () { return { x: 240, y: 496 }; }, kette: [{ x: 240, y: 346 }] }
+    };
+    var TAGESPLAN = [
+      [ORTE.KURS, .36], [ORTE.CAF, .18], [ORTE.FLUR, .16], [ORTE.SD, .1],
+      [ORTE.O, .08], [ORTE.P, .05], [ORTE.FOYER, .04], [ORTE.HAUPT, .03]
+    ];
+
+    function ortWaehlen() {
+      var r = Math.random(), s = 0;
+      for (var i = 0; i < TAGESPLAN.length; i++) { s += TAGESPLAN[i][1]; if (r < s) return TAGESPLAN[i][0]; }
+      return ORTE.FLUR;
+    }
+
+    function weg(a, ort, zielPunkt) {
+      var ziel = zielPunkt || ort.punkt();
+      var pfad = [];
+      var k = a.ort ? a.ort.kette : [];
+      for (var i = 0; i < k.length; i++) pfad.push({ x: k[i].x, y: k[i].y });
+      var zk = ort.kette || [];
+      var flurX = zk.length ? zk[zk.length - 1].x : ziel.x;
+      pfad.push({ x: flurX, y: 346 });
+      for (var j = zk.length - 1; j >= 0; j--) pfad.push({ x: zk[j].x, y: zk[j].y });
+      pfad.push(ziel);
+      a.pfad = pfad; a.ort = ort;
+    }
+
+    var NAMEN = { 0: "H. Protar", 1: "Prof. Plombus", 2: "die Erstis" };
+
+    function neustart() {
+      agenten = []; spuren = [];
+      for (var i = 0; i < 26; i++) {
+        var ort = [ORTE.KURS, ORTE.FLUR, ORTE.CAF][i % 3];
+        var p = ort.punkt();
+        agenten.push({ x: p.x, y: p.y, ort: ort, pfad: [], warte: zufall(0, 2.2), seite: 1, strecke: 0, slot: i, modus: "tag", richtung: 0 });
+      }
+      startZeit = performance.now();
+    }
+
+    function spurSetzen(a, dx, dy) {
+      var l = Math.hypot(dx, dy) || 1, nx = -dy / l, ny = dx / l;
+      a.seite = -a.seite;
+      spuren.push({ x: a.x + nx * 2.6 * a.seite, y: a.y + ny * 2.6 * a.seite, w: Math.atan2(dy, dx), t: performance.now() });
+      if (spuren.length > 1100) spuren.splice(0, spuren.length - 1100);
+    }
+
+    function schritt(a, dt, tempo) {
+      if (!a.pfad.length) return;
+      var z = a.pfad[0], dx = z.x - a.x, dy = z.y - a.y, d = Math.hypot(dx, dy);
+      if (d < 2) { a.pfad.shift(); return; }
+      var s = Math.min(d, tempo * dt);
+      a.x += dx / d * s; a.y += dy / d * s;
+      a.richtung = Math.atan2(dy, dx);
+      a.strecke += s;
+      if (a.strecke > 11) { a.strecke = 0; spurSetzen(a, dx, dy); }
+    }
+
+    function logik(st, dt) {
+      agenten.forEach(function (a) {
+        if (st.t < 17) {
+          if (!a.pfad.length) {
+            a.warte -= dt;
+            if (a.warte <= 0) { weg(a, ortWaehlen()); a.warte = zufall(.8, 3); }
+          }
+          schritt(a, dt, 56);
+        } else if (st.t < 18) {
+          if (a.modus !== "schlange" && a.modus !== "einlass") {
+            a.modus = "schlange";
+            weg(a, ORTE.FLUR, { x: Math.min(588 + a.slot * 3.2, 634), y: 346 });
+            a.ort = ORTE.FLUR;
+          }
+          if (st.t > 17.72 + (a.slot % 13) * 0.018 && a.modus === "schlange") {
+            a.modus = "einlass"; weg(a, ORTE.P);
+          }
+          schritt(a, dt, a.modus === "einlass" ? 62 : 30);
+        } else if (st.t < 19.75) {
+          if (a.modus !== "theater") { a.modus = "theater"; weg(a, ORTE.P); }
+          schritt(a, dt, 70);
+        } else {
+          if (a.modus !== "party") { a.modus = "party"; weg(a, ORTE.FOYER); a.warte = 0; }
+          if (!a.pfad.length) {
+            a.warte -= dt;
+            if (a.warte <= 0) {
+              var p = ORTE.FOYER.punkt();
+              a.pfad = [{ x: (a.x * 2 + p.x) / 3, y: (a.y * 2 + p.y) / 3 }];
+              a.warte = zufall(.15, .6);
+            }
+          }
+          schritt(a, dt, 42);
+        }
+      });
+    }
+
+    function malen(st, verbleib) {
+      ctx.clearRect(0, 0, W, H);
+      var jetzt = performance.now();
+      ctx.fillStyle = "#4a3a22";
+      spuren.forEach(function (s) {
+        var alter = jetzt - s.t;
+        if (alter > 6500) return;
+        ctx.globalAlpha = Math.max(0, 1 - alter / 6500) * .55;
+        ctx.beginPath();
+        ctx.ellipse(s.x, s.y, 3.3, 1.7, s.w, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = .85;
+      ctx.font = "600 13px Caveat, cursive";
+      agenten.forEach(function (a) {
+        var n = NAMEN[a.slot];
+        if (n) ctx.fillText(n, a.x + 6, a.y - 5);
+      });
+      ctx.globalAlpha = 1;
+      if (verbleib < PAUSE) {
+        ctx.fillStyle = "rgba(230,216,180," + (1 - verbleib / PAUSE) * .92 + ")";
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
+    var vorher = 0;
+    function rahmen(ts) {
+      if (!laufend) return;
+      var dt = Math.min((ts - vorher) / 1000 || 0, .08);
+      vorher = ts;
+      var s = (ts - startZeit) / 1000;
+      if (s > GESAMT + PAUSE) { neustart(); s = 0; }
+      var st = simZeit(Math.min(s, GESAMT));
+      var h = Math.floor(st.t), m = Math.floor((st.t - h) * 60);
+      uhr.textContent = (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m;
+      szene.textContent = st.text;
+      logik(st, dt);
+      malen(st, GESAMT + PAUSE - s);
+      rafId = requestAnimationFrame(rahmen);
+    }
+
+    function statisch() {
+      // ruhige Fassung ohne Animation: Spuren als feste Wege
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = "#4a3a22"; ctx.globalAlpha = .5;
+      var wege = [
+        [{ x: 240, y: 490 }, { x: 240, y: 346 }, { x: 540, y: 346 }, { x: 540, y: 176 }, { x: 540, y: 130 }],
+        [{ x: 628, y: 346 }, { x: 588, y: 346 }, { x: 540, y: 346 }, { x: 540, y: 180 }],
+        [{ x: 316, y: 100 }, { x: 316, y: 346 }, { x: 505, y: 346 }, { x: 510, y: 330 }]
+      ];
+      wege.forEach(function (wpkt) {
+        for (var i = 0; i + 1 < wpkt.length; i++) {
+          var a = wpkt[i], b = wpkt[i + 1], d = Math.hypot(b.x - a.x, b.y - a.y), n = Math.floor(d / 13);
+          for (var k = 0; k <= n; k++) {
+            var x = a.x + (b.x - a.x) * k / n, y = a.y + (b.y - a.y) * k / n;
+            var w = Math.atan2(b.y - a.y, b.x - a.x), sgn = k % 2 ? 1 : -1;
+            ctx.beginPath();
+            ctx.ellipse(x - Math.sin(w) * 2.6 * sgn, y + Math.cos(w) * 2.6 * sgn, 3.3, 1.7, w, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      });
+      for (var j = 0; j < 46; j++) {
+        var p = j < 26 ? hexPunkt(540, 124, 36) : { x: zufall(498, 576), y: zufall(304, 354) };
+        ctx.beginPath(); ctx.ellipse(p.x, p.y, 3.1, 1.6, zufall(0, 6.3), 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      uhr.textContent = "18:00";
+      szene.textContent = "Theater in Hörsaal P · Party im Foyer";
+    }
+
+    schwur.addEventListener("click", function () {
+      schwur.style.display = "none";
+      inhalt.classList.remove("zu");
+      inhalt.classList.add("auf");
+      skalieren();
+      if (reduziert) { statisch(); return; }
+      laufend = true; vorher = performance.now(); neustart();
+      rafId = requestAnimationFrame(rahmen);
+    });
+    document.getElementById("unheil").addEventListener("click", function () {
+      laufend = false; cancelAnimationFrame(rafId);
+      inhalt.classList.add("zu"); inhalt.classList.remove("auf");
+      schwur.style.display = "";
+    });
   })();
 </script>
