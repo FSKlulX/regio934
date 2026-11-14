@@ -433,6 +433,47 @@
       a.ort = ORTE.FLUR; a.modus = "schlange";
     }
 
+    // little coloured party lights in the foyer, each blinking in its own rhythm
+    var PARTYLICHTER = (function () {
+      var farben = ["#ff79c6", "#b465f0", "#ffd94a", "#5fd96a", "#58a9ff", "#ff5a5a", "#ff9f45"];
+      var l = [];
+      for (var i = 0; i < 13; i++) {
+        l.push({
+          x: 500 + Math.random() * 72, y: 302 + Math.random() * 50,
+          farbe: farben[i % 7], takt: 120 + Math.random() * 260, phase: Math.random() * 6.3
+        });
+      }
+      return l;
+    })();
+
+    function lichter(st) {
+      var jetzt = performance.now();
+      if (st.t >= 19 && st.t < 24) {
+        PARTYLICHTER.forEach(function (L) {
+          var puls = .5 + .5 * Math.sin(jetzt / L.takt + L.phase);
+          var a = .2 + .7 * puls;
+          ctx.fillStyle = L.farbe;
+          ctx.globalAlpha = a * .3;
+          ctx.beginPath(); ctx.arc(L.x, L.y, 5.5, 0, Math.PI * 2); ctx.fill();
+          ctx.globalAlpha = a;
+          ctx.beginPath(); ctx.arc(L.x, L.y, 2.2, 0, Math.PI * 2); ctx.fill();
+        });
+      }
+      if (st.t >= 18 && st.t < 19) {
+        // flickering picture-show light over the seat rows in Hoersaal P
+        var fl = .55 + .3 * Math.sin(jetzt / 95) + .15 * Math.sin(jetzt / 36);
+        ctx.fillStyle = "#cfe0ff";
+        ctx.globalAlpha = .05 + .14 * fl;
+        ctx.beginPath();
+        ctx.moveTo(528, 96); ctx.lineTo(552, 96);
+        ctx.lineTo(568, 140); ctx.lineTo(512, 140);
+        ctx.closePath(); ctx.fill();
+        ctx.globalAlpha = .3 * fl;
+        ctx.fillRect(522, 84, 36, 8);
+      }
+      ctx.globalAlpha = 1;
+    }
+
     var NAMEN = {
       0: "H. Protar", 1: "Prof. Eisendore", 2: "R. Wachsley",
       3: "Assistenzärztin", 4: "Assistenzarzt", 5: "Assistenzarzt",
@@ -559,6 +600,8 @@
           ctx.fillText(n, a.x + 6, a.y - 5);
         }
       });
+      lichter(st);
+      ctx.fillStyle = "#4a3a22";
       fest.forEach(function (f) {
         var p = f.leben / f.dauer;
         ctx.globalAlpha = Math.min(1, f.leben * 3) * (1 - p) * .9;
