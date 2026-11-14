@@ -345,7 +345,7 @@
     var ctx = cv.getContext("2d");
     var reduziert = matchMedia("(prefers-reduced-motion: reduce)").matches;
     var W = 640, H = 520, laufend = false, rafId = 0, startZeit = 0;
-    var agenten = [], spuren = [];
+    var agenten = [], spuren = [], fest = [];
     var ABSCHNITTE = [
       { von: 8, bis: 17, dauer: 12, text: "Vorlesungen und Kurse" },
       { von: 17, bis: 18, dauer: 7, text: "Schlange am Seiteneingang" },
@@ -440,7 +440,7 @@
     };
 
     function neustart() {
-      agenten = []; spuren = [];
+      agenten = []; spuren = []; fest = [];
       for (var i = 0; i < 40; i++) {
         var ort = [ORTE.K2090, ORTE.FLUR, ORTE.CAF, ORTE.K2080, ORTE.FLUR, ORTE.K2070][i % 6];
         var p = ort.punkt();
@@ -521,6 +521,24 @@
       });
     }
 
+    function festLogik(st, dt) {
+      // little party in the foyer from 19:00 until the map fades at midnight
+      if (st.t >= 19 && st.t < 24 && Math.random() < dt * 2.8) {
+        var art = Math.random();
+        fest.push({
+          x: zufall(500, 574), y: zufall(304, 350),
+          vy: zufall(10, 18), drift: zufall(-5, 5),
+          leben: 0, dauer: zufall(2.6, 4.2),
+          z: art < 0.35 ? "♪" : art < 0.6 ? "♫" : "✦"
+        });
+      }
+      for (var i = fest.length - 1; i >= 0; i--) {
+        var f = fest[i];
+        f.leben += dt; f.y -= f.vy * dt; f.x += f.drift * dt;
+        if (f.leben > f.dauer) fest.splice(i, 1);
+      }
+    }
+
     function malen(st, verbleib) {
       ctx.clearRect(0, 0, W, H);
       var jetzt = performance.now();
@@ -541,6 +559,14 @@
           ctx.fillText(n, a.x + 6, a.y - 5);
         }
       });
+      fest.forEach(function (f) {
+        var p = f.leben / f.dauer;
+        ctx.globalAlpha = Math.min(1, f.leben * 3) * (1 - p) * .9;
+        ctx.fillStyle = f.z === "✦" ? "#8a6d1f" : "#4a3a22";
+        ctx.font = "600 " + (f.z === "✦" ? 11 : 16) + "px Caveat, cursive";
+        ctx.fillText(f.z, f.x, f.y);
+      });
+      ctx.fillStyle = "#4a3a22";
       ctx.globalAlpha = 1;
       if (verbleib < PAUSE) {
         ctx.fillStyle = "rgba(230,216,180," + (1 - verbleib / PAUSE) * .92 + ")";
@@ -560,6 +586,7 @@
       uhr.textContent = (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m;
       szene.textContent = st.text;
       logik(st, dt);
+      festLogik(st, dt);
       malen(st, GESAMT + PAUSE - s);
       rafId = requestAnimationFrame(rahmen);
     }
