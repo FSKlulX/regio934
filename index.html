@@ -416,6 +416,23 @@
       a.pfad = pfad; a.ort = ort;
     }
 
+    function zurSchlange(a) {
+      // at 17:00 sharp everyone heads for the queue - walkers turn off legally
+      // at the next corridor point of their current path instead of finishing the old errand
+      var ziel = { x: 588 + (a.slot % 15) * 3.3, y: 340 + Math.floor(a.slot / 15) * 7 };
+      if (!a.pfad.length) {
+        weg(a, ORTE.FLUR, ziel);
+        a.modus = "schlange";
+        return;
+      }
+      var i = -1;
+      for (var j = 0; j < a.pfad.length; j++) if (a.pfad[j].y === 346) i = j;
+      if (i < 0) return;                 // already on the last steps into a room: arrive first
+      a.pfad = a.pfad.slice(0, i + 1);
+      a.pfad.push(ziel);
+      a.ort = ORTE.FLUR; a.modus = "schlange";
+    }
+
     var NAMEN = {
       0: "H. Protar", 1: "Prof. Eisendore", 2: "R. Wachsley",
       3: "Assistenzärztin", 4: "Assistenzarzt", 5: "Assistenzarzt",
@@ -427,7 +444,7 @@
       for (var i = 0; i < 40; i++) {
         var ort = [ORTE.K2090, ORTE.FLUR, ORTE.CAF, ORTE.K2080, ORTE.FLUR, ORTE.K2070][i % 6];
         var p = ort.punkt();
-        agenten.push({ x: p.x, y: p.y, ort: ort, pfad: [], warte: zufall(0, 2.2), seite: 1, strecke: 0, slot: i, modus: "tag", richtung: 0, sichtbar: 1, spaet: (i % 7 === 3) ? zufall(.05, .18) : 0 });
+        agenten.push({ x: p.x, y: p.y, ort: ort, pfad: [], warte: zufall(0, 2.2), seite: 1, strecke: 0, slot: i, modus: "tag", richtung: 0, sichtbar: 1 });
       }
       startZeit = performance.now();
     }
@@ -462,36 +479,11 @@
           }
           schritt(a, dt, 56);
         } else if (st.t < 18) {
-          if (a.spaet) {
-            // latecomers keep dawdling and only set off shortly before or after 18:00
-            if (st.t < 17.78 + a.spaet) {
-              if (!a.pfad.length) {
-                a.warte -= dt;
-                if (a.warte <= 0) {
-                  var o; do { o = ortWaehlen(); } while (o === ORTE.P || o === ORTE.O);
-                  weg(a, o); a.warte = zufall(.8, 3);
-                }
-              }
-              schritt(a, dt, 56);
-            } else {
-              if (a.modus !== "spaet") {
-                if (a.pfad.length) { schritt(a, dt, 70); return; }
-                a.modus = "spaet"; weg(a, ORTE.P);
-              }
-              schritt(a, dt, 88);
-            }
-            return;
-          }
-          if (a.modus !== "schlange" && a.modus !== "einlass") {
-            if (a.pfad.length) { schritt(a, dt, 85); return; }
-            a.modus = "schlange";
-            weg(a, ORTE.FLUR, { x: 588 + (a.slot % 15) * 3.3, y: 340 + Math.floor(a.slot / 15) * 7 });
-            a.ort = ORTE.FLUR;
-          }
-          if (st.t > 17.25 + (a.slot % 13) * 0.02 && a.modus === "schlange" && !a.pfad.length) {
+          if (a.modus !== "schlange" && a.modus !== "einlass") zurSchlange(a);
+          if (st.t > 17.55 + (a.slot % 13) * 0.010 && a.modus === "schlange" && !a.pfad.length) {
             a.modus = "einlass"; weg(a, ORTE.P);
           }
-          schritt(a, dt, a.modus === "einlass" ? 95 : 80);
+          schritt(a, dt, a.modus === "einlass" ? 110 : 135);
         } else if (st.t < 19) {
           if (a.modus !== "theater") {
             // no teleporting: whoever is not seated yet keeps walking the real corridors
