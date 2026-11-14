@@ -351,9 +351,9 @@
       { von: 17, bis: 18, dauer: 7, text: "Schlange am Seiteneingang" },
       { von: 18, bis: 19, dauer: 8, text: "Theaterstück in Hörsaal P" },
       { von: 19, bis: 19.25, dauer: 3, text: "Alle rüber ins Foyer!" },
-      { von: 19.25, bis: 23, dauer: 13, text: "Party im Foyer · Buffet offen" }
+      { von: 19.25, bis: 24, dauer: 14, text: "Party im Foyer · Buffet offen" }
     ];
-    var GESAMT = 43, PAUSE = 2.5;
+    var GESAMT = 44, PAUSE = 2.5;
 
     function skalieren() {
       var r = Math.min(window.devicePixelRatio || 1, 2);
@@ -369,7 +369,7 @@
         }
         s -= ABSCHNITTE[i].dauer;
       }
-      return { t: 23, text: "Bis zum nächsten Weihnachtscafé" };
+      return { t: 24, text: "Bis zum nächsten Weihnachtscafé" };
     }
 
     function zufall(a, b) { return a + Math.random() * (b - a); }
@@ -460,15 +460,15 @@
           schritt(a, dt, 56);
         } else if (st.t < 18) {
           if (a.modus !== "schlange" && a.modus !== "einlass") {
-            if (a.pfad.length) { schritt(a, dt, 60); return; }
+            if (a.pfad.length) { schritt(a, dt, 85); return; }
             a.modus = "schlange";
             weg(a, ORTE.FLUR, { x: 588 + (a.slot % 15) * 3.3, y: 340 + Math.floor(a.slot / 15) * 7 });
             a.ort = ORTE.FLUR;
           }
-          if (st.t > 17.25 + (a.slot % 13) * 0.02 && a.modus === "schlange") {
+          if (st.t > 17.25 + (a.slot % 13) * 0.02 && a.modus === "schlange" && !a.pfad.length) {
             a.modus = "einlass"; weg(a, ORTE.P);
           }
-          schritt(a, dt, a.modus === "einlass" ? 95 : 30);
+          schritt(a, dt, a.modus === "einlass" ? 95 : 80);
         } else if (st.t < 19) {
           if (a.modus !== "theater") {
             a.modus = "theater"; a.ort = ORTE.P;
