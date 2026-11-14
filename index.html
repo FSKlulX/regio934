@@ -427,7 +427,7 @@
       for (var i = 0; i < 40; i++) {
         var ort = [ORTE.K2090, ORTE.FLUR, ORTE.CAF, ORTE.K2080, ORTE.FLUR, ORTE.K2070][i % 6];
         var p = ort.punkt();
-        agenten.push({ x: p.x, y: p.y, ort: ort, pfad: [], warte: zufall(0, 2.2), seite: 1, strecke: 0, slot: i, modus: "tag", richtung: 0 });
+        agenten.push({ x: p.x, y: p.y, ort: ort, pfad: [], warte: zufall(0, 2.2), seite: 1, strecke: 0, slot: i, modus: "tag", richtung: 0, sichtbar: 1, spaet: (i % 7 === 3) ? zufall(.05, .18) : 0 });
       }
       startZeit = performance.now();
     }
@@ -452,6 +452,9 @@
 
     function logik(st, dt) {
       agenten.forEach(function (a) {
+        // name labels dissolve while seated in the theatre, re-materialise afterwards
+        var zielS = a.modus === "theater" ? 0 : 1;
+        a.sichtbar += Math.max(-dt / 1.4, Math.min(dt / 1.4, zielS - a.sichtbar));
         if (st.t < 17) {
           if (!a.pfad.length) {
             a.warte -= dt;
@@ -459,6 +462,26 @@
           }
           schritt(a, dt, 56);
         } else if (st.t < 18) {
+          if (a.spaet) {
+            // latecomers keep dawdling and only set off shortly before or after 18:00
+            if (st.t < 17.78 + a.spaet) {
+              if (!a.pfad.length) {
+                a.warte -= dt;
+                if (a.warte <= 0) {
+                  var o; do { o = ortWaehlen(); } while (o === ORTE.P || o === ORTE.O);
+                  weg(a, o); a.warte = zufall(.8, 3);
+                }
+              }
+              schritt(a, dt, 56);
+            } else {
+              if (a.modus !== "spaet") {
+                if (a.pfad.length) { schritt(a, dt, 70); return; }
+                a.modus = "spaet"; weg(a, ORTE.P);
+              }
+              schritt(a, dt, 88);
+            }
+            return;
+          }
           if (a.modus !== "schlange" && a.modus !== "einlass") {
             if (a.pfad.length) { schritt(a, dt, 85); return; }
             a.modus = "schlange";
@@ -471,9 +494,15 @@
           schritt(a, dt, a.modus === "einlass" ? 95 : 80);
         } else if (st.t < 19) {
           if (a.modus !== "theater") {
-            a.modus = "theater"; a.ort = ORTE.P;
-            if (Math.hypot(a.x - 540, a.y - 124) > 58) { var pp = hexPunkt(540, 124, 40); a.x = pp.x; a.y = pp.y; }
-            a.pfad = []; a.warte = zufall(1.5, 5);
+            // no teleporting: whoever is not seated yet keeps walking the real corridors
+            if (!a.pfad.length) {
+              if (Math.hypot(a.x - 540, a.y - 124) < 52) {
+                a.modus = "theater"; a.ort = ORTE.P; a.warte = zufall(1.5, 5);
+              } else {
+                weg(a, ORTE.P);
+              }
+            }
+            if (a.modus !== "theater") { schritt(a, dt, 95); return; }
           }
           if (!a.pfad.length) {
             a.warte -= dt;
@@ -512,11 +541,13 @@
         ctx.ellipse(s.x, s.y, 3.3, 1.7, s.w, 0, Math.PI * 2);
         ctx.fill();
       });
-      ctx.globalAlpha = .85;
       ctx.font = "600 13px Caveat, cursive";
       agenten.forEach(function (a) {
         var n = NAMEN[a.slot];
-        if (n) ctx.fillText(n, a.x + 6, a.y - 5);
+        if (n && a.sichtbar > .02) {
+          ctx.globalAlpha = .85 * a.sichtbar;
+          ctx.fillText(n, a.x + 6, a.y - 5);
+        }
       });
       ctx.globalAlpha = 1;
       if (verbleib < PAUSE) {
